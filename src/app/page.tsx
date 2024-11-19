@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 import Section from './components/Section';
@@ -11,21 +11,20 @@ export default function Home() {
   const [code, setCode] = useState('// 여기에 코드를 입력하세요');
   const [generatedPrompt, setGeneratedPrompt] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const [musicResponse, setMusicResponse] = useState<string>('');
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   const handleGenerateMusic = async () => {
     try {
       setIsLoading(true);
       setAudioUrl(null);
-      setMusicResponse('');
+      setGeneratedPrompt('');
       // 프롬프트 생성 요청
       const promptResponse = await fetch('/v1/generate-prompt', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code })
       });
 
       const promptData = await promptResponse.json();
@@ -35,17 +34,15 @@ export default function Home() {
       const musicResponse = await fetch('/v1/generate-music', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ prompt: promptData.prompt }),
+        body: JSON.stringify({ prompt: promptData.prompt })
       });
 
       // blob으로 응답 처리
       const audioBlob = await musicResponse.blob();
       const url = URL.createObjectURL(audioBlob);
       setAudioUrl(url);
-      setMusicResponse('음악이 생성되었습니다.');
-
     } catch (error) {
       console.error('음악 생성 중 오류 발생:', error);
     } finally {
@@ -80,8 +77,8 @@ export default function Home() {
               disabled={isLoading}
               className={`px-4 py-2 text-white rounded-lg transition-colors ${
                 isLoading
-                ? 'bg-indigo-400 cursor-not-allowed'
-                : 'bg-indigo-600 hover:bg-indigo-700'
+                  ? 'bg-indigo-400 cursor-not-allowed'
+                  : 'bg-indigo-600 hover:bg-indigo-700'
               }`}
               onClick={handleGenerateMusic}
             >
@@ -89,17 +86,8 @@ export default function Home() {
             </button>
           </div>
 
-          {/* 프롬프트 결과 표시 섹션 */}
-          {(generatedPrompt) && (
-            <div className="mt-6 p-4 bg-gray-800 rounded-lg">
-              <ReactMarkdown className="text-white prose prose-invert max-w-none">
-                {generatedPrompt}
-              </ReactMarkdown>
-            </div>
-          )}
-
           {/* 음악 결과 표시 섹션 */}
-          {musicResponse && (
+          {!!audioUrl && (
             <div className="mt-6 p-4 bg-gray-800 rounded-lg">
               <h3 className="text-xl font-bold text-white mb-2">생성된 음악</h3>
               <div className="text-white">
@@ -110,6 +98,15 @@ export default function Home() {
                   </audio>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* 프롬프트 결과 표시 섹션 */}
+          {!!generatedPrompt && (
+            <div className="mt-6 p-4 bg-gray-800 rounded-lg">
+              <ReactMarkdown className="text-white prose prose-invert max-w-none">
+                {generatedPrompt}
+              </ReactMarkdown>
             </div>
           )}
         </div>

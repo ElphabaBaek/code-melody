@@ -24,14 +24,10 @@ export async function POST(request: Request) {
       { input }
     ))
 
-    console.log(output);
-
     // 파일 이름 생성
     const fileName = `output-${Date.now()}.mp3`;
-    // 저장할 경로 설정 (public 폴더 내 uploads 디렉토리)
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    const filePath = path.join(uploadDir, fileName);
 
+    // @ts-ignore
     return new NextResponse(output, {
       headers: {
         'Content-Type': 'audio/mpeg',
