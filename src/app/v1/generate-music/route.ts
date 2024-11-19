@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import Replicate from 'replicate';
-import { writeFile } from 'fs/promises';
-import path from 'path';
+
+export const maxDuration = 300;
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
@@ -19,10 +20,10 @@ export async function POST(request: Request) {
       normalization_strategy: 'peak'
     };
 
-    const output = (await replicate.run(
+    const output = await replicate.run(
       'meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb',
       { input }
-    ))
+    );
 
     // 파일 이름 생성
     const fileName = `output-${Date.now()}.mp3`;
