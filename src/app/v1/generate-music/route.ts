@@ -17,7 +17,8 @@ export async function POST(request: Request) {
       prompt: prompt,
       model_version: 'stereo-large',
       output_format: 'mp3',
-      normalization_strategy: 'peak'
+      normalization_strategy: 'peak',
+      duration: 20,
     };
 
     const output = await replicate.run(
